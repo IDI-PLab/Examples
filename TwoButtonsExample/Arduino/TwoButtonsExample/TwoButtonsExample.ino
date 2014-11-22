@@ -96,10 +96,14 @@ void loop()
     // Set ending character
     text[char_num] = 0;
     
+    // Del tekststrengen ved tegnet ':'. Dette gir oss starten paa siste halvdel strengen
+    // Split the string at ':'. This gives us the start of second part of string
     // se strstr
     char* secondPart = strchr (text, ':');
     
-    if (secondPart == 0) {
+    // Hvis vi ikke fant del 2 er det noe feil. Saa vi kan hoppe ut av loopen.
+    // If we did not find part 2 something is wrong, so we can jump out of loop.
+    if (secondPart == 0) {      // null peker sjekk // null pointer check
       // Dette skal ikke skje, saa vi kan si fra at det har skjedd
       // This should not happen, so we can tell that it did
       Serial.print ("    Mottok ukjent kommando: ");
@@ -107,10 +111,19 @@ void loop()
       return;
     }
     
+    // Foerste bokstav i andre streng maa vaere 0 for aa avslutte forste streng. Var ':'
+    // First character in second string must be 0 to end first string. Was ':'
     secondPart[0] = 0;
+    // Dette hopper til neste bokstav. Ogsaa kjent som pekeraritmetikk
+    // This jumps to next character. Also known as pointer arithmetics
     secondPart++;
     
+    // Bruk innebygde c/c++ funksjoner for aa sammenligne med knappenavn og kommandoer
+    // Use built in c/c++ functions to compare with button names and commandoes
     if (strcmp ("B1", text) == 0) {
+      
+      // Roed knapp
+      // Red button
       if (strcmp ("ON", secondPart) == 0) {
         digitalWrite (RED_OUT, HIGH);
       } else if (strcmp("OFF", secondPart) == 0) {
@@ -121,7 +134,11 @@ void loop()
         Serial.print ("    Mottok ukjent kommando: ");
         Serial.println (secondPart);
       }
+      
     } else if (strcmp ("B2", text) == 0) {
+      
+      // Groenn knapp
+      // Green button
       if (strcmp ("ON", secondPart) == 0) {
         digitalWrite (GREEN_OUT, HIGH);
       } else if (strcmp("OFF", secondPart) == 0) {
@@ -132,6 +149,7 @@ void loop()
         Serial.print ("    Mottok ukjent kommando: ");
         Serial.println (secondPart);
       }
+      
     } else {
       // Dette skal ikke skje, saa vi kan si fra at det har skjedd
       // This should not happen, so we can tell that it did
