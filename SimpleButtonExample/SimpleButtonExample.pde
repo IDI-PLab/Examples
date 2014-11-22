@@ -134,7 +134,6 @@ void bUpdate () {
     // Sjekk om musa er innenfor i y-retning
     // Check if mouse is within bounds in y direction
     buttonPressed = buttonPressed && mY >= buttonY && mY <= (buttonY + buttonSize); 
-    btnChanged ();
   }
   
   // Hvis statusen til knappen er endret, si ifra til brua. Dette gir oss minimalt med kommunikasjon
