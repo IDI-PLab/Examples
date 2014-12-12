@@ -152,9 +152,9 @@ void btnChanged () {
   if (pBridge != null) {
     String send;
     if (buttonPressed) {
-      send = "ON";
+      send = "ON;";
     } else {
-      send = "OFF";
+      send = "OFF;";
     }
     pBridge.write (send);
   }

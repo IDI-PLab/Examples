@@ -1,136 +1,105 @@
-// Inkluderinger som trengs for ADAFRUIT BLE enhet
-// Inclusions needed for ADAFRUIT BLE unit
-#include <SPI.h>
-#include "Adafruit_BLE_UART.h"
+// Inkluderer bibliotek for aa gjnnomfoere seriell kommunikasjon med bluetooth
+// Including library to do serial communication with bluetooth
+#include <SoftwareSerial.h>
 
-// Definer inn/utgangspinnene som brukes. Dette er for aa bruke ADAFRUIT sin enhet
-// Define I/O ports used. This is for ADAFRUIT unit
-#define ADAFRUITBLE_REQ 10
-#define ADAFRUITBLE_RDY 2
-#define ADAFRUITBLE_RST 9
+// Definer inn/utgangspinnene som brukes for send (TX) og motta (RX) for bluetooth
+// Define I/O ports used for transmit (TX) and receive (RX)
+const int BT_RX = 10;
+const int BT_TX = 11;
 
-// Hvilken utgang vi har lyset paa
-// Which output we have the light connected to
-#define LIGHT_OUT 4
+
+// Hvilken utgang vi har lysene paa
+// Which output we have the lights connected to
+const int LIGHT_OUT = 4;
 
 // Maksimalt antall bokstaver vi kan motta
 // Max number of characters we can accept
-#define MAX_CHARS 20
+const int MAX_CHARS = 20;
 
-Adafruit_BLE_UART BTLEserial = Adafruit_BLE_UART(ADAFRUITBLE_REQ, ADAFRUITBLE_RDY, ADAFRUITBLE_RST);
+// Vi vet en beskjed har en maksimumsstoerrelse, vi maa kunne holde denne verdien pluss en 0 tilslutt
+// We know a message has a maximum size, we must hold be able to hold this value plus an ending 0.
+char text[MAX_CHARS+1];
+int charNum = 0;
 
-// Siste status. Bruk for aa sjekke endringer
-// Last status. Use to check for differences
-aci_evt_opcode_t laststatus = ACI_EVT_DISCONNECTED;
+// Definer serieporten for kommunikasjon med bluetooth
+// Define the serial port for communication with bluetooth
+SoftwareSerial btSerial (BT_RX, BT_TX);
 
 // Oppsett av enheten og gi den til kjenne med BLE
 // Set up the unit and start advertising with BLE
 void setup(void)
 { 
+  // Start kommunikasjon med konsoll
+  // Start communication throuhg console
   Serial.begin (9600);
+  // Linja under trengs kun for Leonardo (kan slettes om du bruker Arduino UNO)
+  // The following line is only needed for Leonardo (can be deleted if you are using Arduino UNO)
   while (!Serial);
-  Serial.println ("Enkel knapp demonstrasjon med ADAFRUIT");
+  Serial.println ("Enkel knapp demonstrasjon med BLUETOOTH");
   
   // Setter utgangen for lyset
   // Set the output for our light
   pinMode (LIGHT_OUT, OUTPUT); 
   digitalWrite (LIGHT_OUT, LOW);
-
-  // Navnet kan maksimalt vaere 7 bokstaver
-  // Name can max be 7 characters
-  BTLEserial.setDeviceName ("Knapp");
-
-  BTLEserial.begin ();
-}
-
-boolean is_on (char* commando) {
-  char on[2] = { 'O', 'N' };
-  for (int i = 0; i < 2; i++) {
-    if (commando[i] != on[i]) {
-      return false;
-    }
-  }
   
-  return true;
+  // Start kommunikasjonen med bluetooth enhet
+  // Start communication with bluetooth unit
+  btSerial.begin (9600);
 }
-
-boolean is_off (char* commando) {
-  char off[3] = { 'O', 'F', 'F' };
-  for (int i = 0; i < 3; i++) {
-    if (commando[i] != off[i]) {
-      return false;
-    }
-  }
-  
-  return true;
-}
-
 
 void loop()
 {
-  // Faa enheten til aa oppdatere sed
-  // Make the unit update itself
-  BTLEserial.pollACI();
-
-  // Etterspoer status
-  // Ask for current status
-  aci_evt_opcode_t status = BTLEserial.getState();
-  
-  // Hvis statusen er endra
-  // If the status has changed
-  if (status != laststatus) {
-    // Skiv den ut
-    // print it
-    if (status == ACI_EVT_DEVICE_STARTED) {
-        Serial.println ("  Her er jeg!");
-    }
-    if (status == ACI_EVT_CONNECTED) {
-        Serial.println ("  Tilkoblet");
-    }
-    if (status == ACI_EVT_DISCONNECTED) {
-        Serial.println ("  Frakoblet");
+  // Se etter om vi har mottatt en ny bokstav
+  // See if we have received a new character
+  if (btSerial.available () > 0) {
+    
+    // Les inn bokstaven
+    // Read the character
+    text[charNum] = btSerial.read ();
+    Serial.write (text[charNum]);
+    // Se etter om dette var siste bokstaven i en instruksjon
+    // See if this was the last character in an instruction
+    if (text[charNum] == ';') {
+      // Sletter semikolonet, setter det som enden paa teksten
+      // Removes the semicolon, set the character to end of string
+      text[charNum] = 0;
+      // Neste bokstav er foerste bokstav i en ny instruksjon
+      // Next character is the first character in a new instruction
+      charNum = 0;
+      // Tolk og utoer kommando
+      // Interpret and execute command
+      readCommand ();
+    } else {
+      // Neste bokstav er nummer
+      // Next character is number
+      charNum++;
     }
     
-    // Husk denne statusen til neste gang
-    // Remember this status for next time
-    laststatus = status;
+    // Forsikre at vi neste gang ikke gaar ut over maks lengden vaar
+    // Ensure that we next time do not exceed the max length of a string
+    if (charNum == MAX_CHARS) {
+      Serial.println ("For lang tekst!");
+      charNum--;
+    }
   }
+  
+  // Hvis vi har lyst til aa kunne skrive kommandoer i konsollvinduet, tar vi med dette
+  // If we want to be able to write commands in the console window, we include this
+  if (Serial.available () > 0) {
+    btSerial.write (Serial.read ());
+  }
+}
 
-  // Hvis vi er tilkoblet kan vi se om vi har mottatt en instruksjon
-  // If we are connected, we can check if we have an instruction waiting
-  if ((status == ACI_EVT_CONNECTED) && BTLEserial.available ()) {
-    
-    // Vi vet en beskjed har en maksimumsstoerrelse, vi maa kunne holde denne verdien pluss en 0 tilslutt
-    // We know a message has a maximum size, we must hold be able to hold this value plus an ending 0.
-    char text[MAX_CHARS+1];
-    int char_num = 0;
-    
-    // Les bokstavene en etter en
-    // Read the characters one by one
-    while (BTLEserial.available () && (char_num < MAX_CHARS)) {
-      text[char_num] = BTLEserial.read ();
-      char_num++;
-    }
-    
-    // Sett siste bokstav
-    // Set ending character
-    text[char_num] = '\0';
-    
-    // Vi kan naa sjekke hva vi skal gjoear
-    // We can now check what we should do
-    if (is_on (text)) {
-      // Slaa paa lyset
-      // Turn on the light
+void readCommand () {
+  Serial.print ("Mottok: ");
+  Serial.println (text);
+  if (strcmp ("ON", text) == 0) {
       digitalWrite (LIGHT_OUT, HIGH);
-    } else if (is_off (text)) {
-      // Slaa av lystet
-      // Turn the light off
+    } else if (strcmp("OFF", text) == 0) {
       digitalWrite (LIGHT_OUT, LOW);
     } else {
       // Dette skal ikke skje, saa vi kan si fra at det har skjedd
       // This should not happen, so we can tell that it did
-      Serial.print ("    Mottok ukjent kommando: ");
-      Serial.println (text);
+      Serial.print ("Ukjent kommando!");
     }
-  }
 }
