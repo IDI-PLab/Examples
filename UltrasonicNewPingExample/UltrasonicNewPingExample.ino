@@ -55,7 +55,10 @@ void loop() {
   
   // Beregn hvor langt dette var
   // Calculate how far this time represent
-  float distance = time / US_ROUNDTRIP_CM;
+  float distance = sonar.convert_cm(time);
+  // Linja under ville gitt noeyaktig samme resultat
+  // The line under would have given the exact same result
+  //float distance = time / US_ROUNDTRIP_CM;
   
   // Saa printer vi ut resultatet
   // We then print the result
