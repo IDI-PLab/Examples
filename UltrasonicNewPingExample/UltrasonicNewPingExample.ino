@@ -1,5 +1,5 @@
 /*
-  Ultrasound Example
+  Ultrasonic NewPing Example
   
   Dette er et eksempel paa hvordan du kan bruke en HC-SR04 ultralyd sensor med biblioteket NewPing for aa maale avstand. Lengde (i centimeter) maales og skrives ut hvert sekund.
   
