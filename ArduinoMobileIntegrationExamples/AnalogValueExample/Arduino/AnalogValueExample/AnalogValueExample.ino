@@ -45,36 +45,15 @@ void loop()
   int new_val = analogRead (A0);
     
   // Vi kan naa sjekke om verdien har endra seg, og hvis den har det send den. Ha litt feilmarginer
-  // We can now check if th value has changed, and if so send it. Have some morgins
+  // We can now check if th value has changed, and if so send it. Have some margins
   int diff = new_val - prev_val;
   if (abs(diff) > 5) {
-    // Foerst trenger vi ett sted aa lagre teksten som skal sendes
-    // First we need a place to store the text to send
-    // Denne maaten garanterer vi har stort no rom til aa lagre verdien uansett hvilket tall det er
-    // This way guarantees we have enough space no matter the number
-    // Vi kunne brukt 5 siden vi vet selve tallet er mellom 0 og 1024 (4 tegn) og ett tegn til avslutningsbokstanven
-    // We could have used 5 since we know the number is between 0 and 1024 (4 characters) and one character to the end character
-    int txt_size = sizeof (int) * 3 + 1;
-    char text[txt_size];
-    // Det finnes alternativer til itoa, men den viker som den skal
-    // The are alternatives to itoa, but it works as it should
-    // 10 til slutt betyr vi faar tallet i desimal format (slik som vi bruker til vanlig)
-    // 10 in the end means vi get the number in decimal format (which we normally use)
-    itoa (new_val, text, 10);
+    // Uten marginer kommer vi nok til aa proeve aa sende alt for ofte.
+    // Without the margin, we will probably try to send way too often
     
-    // sjekk den faktiske stoerrelsen paa teksten
-    // Check the actual size of the text
-    int used_size = 0;
-    while ((used_size < txt_size ) && (text[used_size] != 0)) {
-      used_size++;
-    }
-    
-    // Send data
-    // Send data
-    // Vi trenger et annet format naar vi sender (dette er pga hvordan biblioteket vi bruker definerer send data) -> casting
-    // We need another format when we send (due to how the library we use define send data) -> casting
-    //BTLEserial.write (send_buffer, used_size);
-    btSerial.write ((uint8_t*)text, used_size);
+    // Siden det er bare ett tall som skal sendes, og vi maa avslutte med ny linje, kaller vi bare println.
+    // Since it is only one number that should be sent, and that number has to be ended by a newline, we just use println
+    btSerial.println(new_val);
     
     // Husk aa oppdatere forrige verdi
     // Remember to update the last value
