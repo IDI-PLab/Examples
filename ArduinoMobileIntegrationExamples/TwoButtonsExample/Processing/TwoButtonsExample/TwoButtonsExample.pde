@@ -6,6 +6,7 @@ interface PLabBridge {
   public void write (String string);
   public void subscribeRead (PLabRead sub);
   public void subscribeError (PLabRead sub);
+  public void disconnect();
 }
 interface PLabRead {
   public void read(String string);
@@ -138,6 +139,8 @@ int worldHeight = 400;
 ToggleButton btn1;
 ToggleButton btn2;
 
+ToggleButton disconnectBtn;
+
 // Oversettelse fra verdenskoordinater til skjermkoordinater
 // Conversion from world coordinates to screen coordinates
 float toScreenX (float x) {
@@ -165,6 +168,9 @@ void setup () {
   // Lager knapp 2, groenn
   // Create button 2, green
   btn2 = new ToggleButton (75, 100, 300, #7FFF7F, #005500);
+  
+  disconnectBtn = new ToggleButton(25, 25, 370, #FF0000, #CC0000);
+  
   // Denne "Sett stoerrelsen" vil bli overkjoert naar brua blir bundet
   // This size set will be overridden when bridge is bound
   size (240, 360);
@@ -186,6 +192,7 @@ void draw () {
   // Draw the buttons
   btn1.draw ();
   btn2.draw ();
+  disconnectBtn.draw();
 }
 
 /**
@@ -198,6 +205,7 @@ void mouseClicked () {
   float mY = toWorldY (mouseY);
   btn1.click (mX, mY);
   btn2.click (mX, mY);
+  disconnectBtn.click(mX, mY);
 }
 
 /**
@@ -217,5 +225,8 @@ void update () {
     if (pBridge != null) {
       pBridge.write ("B2:" + val + ";");
     }
+  }
+  if (disconnectBtn.readState() && pBridge != null) {
+    pBridge.disconnect();
   }
 }

@@ -123,9 +123,9 @@ void readCommand () {
   // This jumps to next character. Also known as pointer arithmetics
   secondPart++;
   
-  // Bruk innebygde c/c++ funksjoner for aa sammenligne med knappenavn og kommandoer
+  // Bruk innebygde c/c++ funksjoner for aa sammenligne med knappenavn og kommandoer.
   // Use built in c/c++ functions to compare with button names and commandoes
-  if (strcmp ("B1", text) == 0) {
+  if (strcmp ("B1", text) >= 0) {
     
     // Roed knapp
     // Red button
@@ -140,7 +140,7 @@ void readCommand () {
       Serial.println (secondPart);
     }
     
-  } else if (strcmp ("B2", text) == 0) {
+  } else if (strcmp ("B2", text) >= 0) {
     
     // Groenn knapp
     // Green button
