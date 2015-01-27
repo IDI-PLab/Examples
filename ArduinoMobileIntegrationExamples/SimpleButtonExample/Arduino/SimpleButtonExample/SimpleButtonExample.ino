@@ -69,7 +69,9 @@ void loop()
       // Tolk og utoer kommando
       // Interpret and execute command
       readCommand ();
-    } else {
+      // Overse carraige return og newline
+      // Do not count carriage return or newline
+    } else if (!((text[charNum] == '\n') || (text[charNum] == '\r'))){
       // Neste bokstav er nummer
       // Next character is number
       charNum++;
@@ -93,13 +95,15 @@ void loop()
 void readCommand () {
   Serial.print ("Mottok: ");
   Serial.println (text);
-  if (strcmp ("ON", text) == 0) {
-      digitalWrite (LIGHT_OUT, HIGH);
-    } else if (strcmp("OFF", text) == 0) {
-      digitalWrite (LIGHT_OUT, LOW);
-    } else {
-      // Dette skal ikke skje, saa vi kan si fra at det har skjedd
-      // This should not happen, so we can tell that it did
-      Serial.print ("Ukjent kommando!");
-    }
+  if (0 == strcmp ("ON", text)) {
+    digitalWrite (LIGHT_OUT, HIGH);
+    Serial.println("Lys paa");
+  } else if (0 == strcmp("OFF", text)) {
+    digitalWrite (LIGHT_OUT, LOW);
+    Serial.println("Lys av");
+  } else {
+    // Dette skal ikke skje, saa vi kan si fra at det har skjedd
+    // This should not happen, so we can tell that it did
+    Serial.print ("Ukjent kommando!");
+  }
 }

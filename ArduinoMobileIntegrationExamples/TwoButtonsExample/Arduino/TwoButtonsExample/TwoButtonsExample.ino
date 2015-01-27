@@ -74,7 +74,9 @@ void loop()
       // Tolk og utoer kommando
       // Interpret and execute command
       readCommand ();
-    } else {
+      // Overse carriage return og newline
+      // Do not count carriage return or newline
+    } else if (!((text[charNum] == '\n') || (text[charNum] == '\r'))){
       // Neste bokstav er nummer
       // Next character is number
       charNum++;
@@ -125,7 +127,8 @@ void readCommand () {
   
   // Bruk innebygde c/c++ funksjoner for aa sammenligne med knappenavn og kommandoer.
   // Use built in c/c++ functions to compare with button names and commandoes
-  if (strcmp ("B1", text) >= 0) {
+
+  if (strcmp ("B1", text) == 0) {
     
     // Roed knapp
     // Red button
@@ -140,7 +143,7 @@ void readCommand () {
       Serial.println (secondPart);
     }
     
-  } else if (strcmp ("B2", text) >= 0) {
+  } else if (strcmp ("B2", text) == 0) {
     
     // Groenn knapp
     // Green button
