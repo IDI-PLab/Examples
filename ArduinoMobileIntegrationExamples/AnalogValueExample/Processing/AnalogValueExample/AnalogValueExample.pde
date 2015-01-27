@@ -6,6 +6,7 @@ interface PLabBridge {
   public void write (String string);
   public void subscribeRead (PLabRead sub);
   public void subscribeError (PLabRead sub);
+  public void disconnect();
 }
 interface PLabRead {
   public void read(String string);
@@ -141,4 +142,10 @@ void drawNeedle () {
   // Og så tegner vi naala
   // And the draw the needle
   line (centrumX, centrumY, endX, endY);
+}
+
+void mouseClicked() {
+  if (pBridge != null) {
+    pBridge.disconnect();
+  }
 }

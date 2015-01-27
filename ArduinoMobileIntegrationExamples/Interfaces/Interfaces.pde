@@ -22,6 +22,10 @@ interface PLabBridge {
    * register callback function that will get error messages if any from the app
    */
   public void subscribeError (PLabRead sub);
+  /**
+   * Disconnects the device and returns to main menu
+   */
+  public void disconnect();
 }
 
 /**
