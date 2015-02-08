@@ -217,13 +217,13 @@ void update () {
   if (btn1.hasChanged ()) {
     String val = btn1.readState () ? "ON" : "OFF";
     if (pBridge != null) {
-      pBridge.write ("B1:" + val + ";");
+      pBridge.write ("B1:" + val);
     }
   }
   if (btn2.hasChanged ()) {
     String val = btn2.readState () ? "ON" : "OFF";
     if (pBridge != null) {
-      pBridge.write ("B2:" + val + ";");
+      pBridge.write ("B2:" + val);
     }
   }
   if (disconnectBtn.readState() && pBridge != null) {
