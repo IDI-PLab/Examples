@@ -1,6 +1,7 @@
 // Inkluderer bibliotek for aa gjnnomfoere seriell kommunikasjon med bluetooth
 // Including library to do serial communication with bluetooth
 #include <SoftwareSerial.h>
+#include <PLabBTSerial.h>
 
 // Definer inn/utgangspinnene som brukes for send (TX) og motta (RX) for bluetooth
 // Define I/O ports used for transmit (TX) and receive (RX)
@@ -9,7 +10,7 @@ const int BT_TX = 11;
 
 // Definer serieporten for kommunikasjon med bluetooth
 // Define the serial port for communication with bluetooth
-SoftwareSerial btSerial (BT_RX, BT_TX);
+PLabBTSerial btSerial (BT_RX, BT_TX);
 
 // Siste leste verdi, for aa sjekke endringer
 // Last read value, to check for changes

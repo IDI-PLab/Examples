@@ -1,7 +1,7 @@
 /*
  * ---------- Interfaces that make conversion to mobile simpler ----------
  */
-// Interface documented in InterfacesExample
+// Interfaces documented in InterfacesExample
 interface PLabBridge {
   public int getWidth ();
   public int getHeight ();
@@ -10,21 +10,8 @@ interface PLabBridge {
   public void subscribeError (PLabRead sub);
   public void disconnect();
 }
-
-// Interface documented in InterfacesExample
 interface PLabRead {
   public void read(String string);
-}
-
-// Class implementing the PLabRead interface, only outputs data to console
-class OutputMessages implements PLabRead {
-  public void read(String string) {
-    //println(string);
-    // Echo it back
-    if (plabBridge != null) {
-      plabBridge.write("Echo: " + string);
-    }
-  }
 }
 
 
@@ -35,12 +22,20 @@ class OutputMessages implements PLabRead {
 /*
  * ---------- Binding the code with call javascript/serial port ----------
  */
-private PLabBridge plabBridge;
+private PLabBridge pBridge;
+private int displayColor = 255;
+private String received = null;
 
 void bindPLabBridge (PLabBridge bridge) {
-  plabBridge = bridge;
+  pBridge = bridge;
   
-  bridge.subscribeRead(new OutputMessages());
+  // Subscribe to messages. Print incomming messages and change color of drawing
+  bridge.subscribeRead(new PLabRead() {
+    public void read (String string) {
+      println("Incomming: " + string);
+      displayColor = (displayColor + 64) % 256;
+    }
+  });
   
   // Not really needed, but included as it is needed to fill screen on mobile device
   size(bridge.getWidth (), bridge.getHeight ());
@@ -60,13 +55,13 @@ void draw() {
   // Draw some nice squares
   background(0);
   stroke(255);
-  fill(127);
+  fill(displayColor);
   rect(25,25,50,50);
 }
 
 void mouseClicked() {
   // Send a message to bt unit
-  if (plabBridge != null) {
-    plabBridge.write("Hello");
+  if (pBridge != null) {
+    pBridge.write("Hello");
   }
 }

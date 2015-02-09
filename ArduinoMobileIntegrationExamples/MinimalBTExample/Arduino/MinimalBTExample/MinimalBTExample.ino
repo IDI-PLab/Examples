@@ -14,7 +14,7 @@ const int btTxPin = 6;
 // rx refers to input to arduino, that is what is transmitted (tx) from the device. tx works the same way.
 // inverse_logic is inherited from SoftwareSerial. Set this to true if your device responds to active low. The argument is optional and defaults to false.
 // bufferSize is the size of the internal buffer of PLabBTSerial. Set this to be able to include the longest message you expect to receive. Defaults to 50
-PLabBTSerial btSerial(btRxPin, btRxPin, false /*optional, default: false*/, 100 /*optional, default: 50*/);
+PLabBTSerial btSerial(btRxPin, btTxPin /*, false optional, default: false, 100 optional, default: 50*/);
 
 void setup() {
   // Start debug output
@@ -35,6 +35,8 @@ void loop() {
     // Print the incomming data to console
     Serial.print("Incomming: ");
     Serial.println(text);
+    Serial. println("Echo");
+    btSerial.println(text);
   }
   // If some data has been written in the console, send this to bt unit
   while (Serial.available() > 0) {

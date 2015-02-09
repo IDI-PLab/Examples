@@ -1,7 +1,7 @@
 /*
  * ---------- Interfaces that make conversion to mobile simpler ----------
  */
-// Interface documented in InterfacesExample
+// Interfaces documented in InterfacesExample
 interface PLabBridge {
   public int getWidth ();
   public int getHeight ();
@@ -10,17 +10,8 @@ interface PLabBridge {
   public void subscribeError (PLabRead sub);
   public void disconnect();
 }
-
-// Interface documented in InterfacesExample
 interface PLabRead {
   public void read(String string);
-}
-
-// Class implementing the PLabRead interface, only outputs data to console
-class OutputMessages implements PLabRead {
-  public void read(String string) {
-    println(string);
-  }
 }
 
 
@@ -90,12 +81,20 @@ void serialEvent(Serial p) {
 /*
  * ---------- Binding the code with call javascript/serial port ----------
  */
-private PLabBridge plabBridge;
+private PLabBridge pBridge;
+private int displayColor = 255;
+private String received = null;
 
 void bindPLabBridge (PLabBridge bridge) {
-  plabBridge = bridge;
+  pBridge = bridge;
   
-  bridge.subscribeRead(new OutputMessages());
+  // Subscribe to messages. Print incomming messages and change color of drawing
+  bridge.subscribeRead(new PLabRead() {
+    public void read (String string) {
+      println("Incomming: " + string);
+      displayColor = (displayColor + 64) % 256;
+    }
+  });
   
   // Not really needed, but included as it is needed to fill screen on mobile device
   size(bridge.getWidth (), bridge.getHeight ());
@@ -108,18 +107,27 @@ void setup() {
   // Setup a size for the sketch
   size(100,100);
   // Call setupSerial to run serial communication with com port. Comment out/remove when moving code to mobile device
-  setupSerial("COM12");
+  // ---------------------- THIS IS INDIVIDUAL TO EACH COMPUTER!!! ----------------
+  // The com port here is found since I know which one in the list is the paired device.
+  // Which one can be seen by name of the port and setting of paired device
+  // There may be some issues when arduino is connected directly to the computer,
+  // here, on this computer, it actually sends all that is written to serial port of Arduino
+  // to the virtual port I connect to. It should not, but it does. Fix by using different
+  // computers for Arduino and this sketch, or use external powersupply to Arduino (not connected to computer) 
+  setupSerial(Serial.list()[1]);
 }
 
 void draw() {
   // Draw some nice squares
   background(0);
   stroke(255);
-  fill(127);
+  fill(displayColor);
   rect(25,25,50,50);
 }
 
 void mouseClicked() {
   // Send a message to bt unit
-  plabBridge.write("Hello\n");
+  if (pBridge != null) {
+    pBridge.write("Hello");
+  }
 }
