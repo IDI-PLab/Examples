@@ -28,10 +28,8 @@ class BridgeReplacer implements PLabBridge {
     port = serialPort;
     port.clear();
     
-    // Send a message to show we are connected
-    port.write("Hello world!\n");
     // Buffer data until a newline character is reached
-    //port.bufferUntil('\n');
+    port.bufferUntil('\n');
   } 
   public int getWidth () {
     return width;
@@ -52,9 +50,28 @@ class BridgeReplacer implements PLabBridge {
 
 BridgeReplacer bridgeReplacer;
 
-void setupSerial(String portName) {
-  // Display all installed serial ports on computer
-  println(Serial.list());
+void setupSerial() {
+  // Get and display all installed serial ports on computer
+  String[] serials = Serial.list();
+  println(serials);
+  // We need to connect to a port.
+  // ---------------------- THIS IS INDIVIDUAL TO EACH COMPUTER!!! ----------------
+  // On Windows computer, which one can be seen by name of the port and setting of paired device.
+  // On a Mac/unix system, it should be the one containing the name of the device preceeded by tty
+  String portName;
+  // The com port here is found since I know which one in the list is the paired device, and I am on a Windows computer
+  portName = "COM12";
+  // ----- Basic search algorithm. Uncomment to use on Mac
+  /*
+  for (int i = 0; i < serials.length; i++) {
+    portName = serials[i];
+    // The name of the handed out bt devices contains the phrase "PLab". The first element containing this phrase should be the correct port.
+    if (portName != null && portName.contains("PLab")) {
+      break;
+    }
+  }
+  */
+   
   // Init a new serial connection
   Serial port = new Serial(this, portName, 9600);
   // Set up our replacement for the plab bridge
@@ -68,7 +85,7 @@ void serialEvent(Serial p) {
   // Ensure the was event was fired from the correct port
   if (p == bridgeReplacer.port) {
     // Try to read until a newline is found
-    String msg = p.readString();
+    String msg = p.readStringUntil('\n');
     // Check the event was fired because a newline was received, and that we have a receiver
     if (msg != null && bridgeReplacer.subscribedRead != null) {
       // Send message to the one listening
@@ -107,14 +124,7 @@ void setup() {
   // Setup a size for the sketch
   size(100,100);
   // Call setupSerial to run serial communication with com port. Comment out/remove when moving code to mobile device
-  // ---------------------- THIS IS INDIVIDUAL TO EACH COMPUTER!!! ----------------
-  // The com port here is found since I know which one in the list is the paired device.
-  // Which one can be seen by name of the port and setting of paired device
-  // There may be some issues when arduino is connected directly to the computer,
-  // here, on this computer, it actually sends all that is written to serial port of Arduino
-  // to the virtual port I connect to. It should not, but it does. Fix by using different
-  // computers for Arduino and this sketch, or use external powersupply to Arduino (not connected to computer) 
-  setupSerial(Serial.list()[1]);
+  setupSerial();
 }
 
 void draw() {
