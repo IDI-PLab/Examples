@@ -36,6 +36,7 @@ void loop() {
     Serial.print("Incomming: ");
     Serial.println(text);
     Serial. println("Echo");
+    // Echo text back
     btSerial.println(text);
   }
   // If some data has been written in the console, send this to bt unit
