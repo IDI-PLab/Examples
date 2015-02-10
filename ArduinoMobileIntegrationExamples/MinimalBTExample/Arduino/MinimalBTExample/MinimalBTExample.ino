@@ -42,9 +42,5 @@ void loop() {
   while (Serial.available() > 0) {
     char letter = Serial.read();
     btSerial.write(letter);
-    if (letter == ';') {
-      btSerial.write('\n');
-      Serial.println("Sent data");
-    }
   }
 }
