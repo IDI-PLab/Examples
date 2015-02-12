@@ -34,7 +34,7 @@ void setup()
   btCallback.registerCallback("B1", redLightControl);
   btCallback.registerCallback("B2", greenLightControl);
   // Add an additional to listen to B2. Shows that multiple functions can be registered to single command
-  btCallback.registerCallback("B2", greenLightControl);
+  btCallback.registerCallback("B2", printMessage);
   // Register callback just in case we receive a message without ':'. This is not needed, but included for debugging and demonstration
   btCallback.registerNoCommandCallback(printMessage);
   
