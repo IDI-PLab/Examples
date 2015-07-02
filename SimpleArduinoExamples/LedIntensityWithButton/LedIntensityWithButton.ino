@@ -1,3 +1,25 @@
+/*
+ * LedIntensityWithButton
+ * 
+ * Slår av og på en lysdiode (LED) med en knapp, hvor er lysstyrken avhengig av et pot meter.
+ * 
+ * Kretsen:
+ *   1 x LED
+ *   1 x 220 ohm motstand
+ *   1 x 10k ohm motstand
+ *   1 x trykkknapp
+ *   1 x pot (10k ohm eller 100k ohm)
+ *   
+ * 
+ * Turns a LED on and off with a button, where intensity is dependent on a pot meter.
+ * 
+ * Circuit:
+ *   1 x LED
+ *   1 x 220 ohm resistor
+ *   1 x 10k ohm resistor
+ *   1 x push button
+ *   1 x pot (10k ohm or 100k ohm)
+ */
 const int ledPin = 6;
 const int potPin = A0;
 const int switchPin = 8;
