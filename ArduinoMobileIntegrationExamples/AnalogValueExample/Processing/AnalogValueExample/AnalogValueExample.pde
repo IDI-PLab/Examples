@@ -1,16 +1,26 @@
-// Interfacene er beskrevet i Interfaces eksempelet
-// Interfaces described in the Interfaces example
-interface PLabBridge {
-  public int getWidth ();
-  public int getHeight ();
-  public void write (String string);
-  public void subscribeRead (PLabRead sub);
-  public void subscribeError (PLabRead sub);
-  public void disconnect();
-}
-interface PLabRead {
-  public void read(String string);
-}
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+/*
+ * This example shows how to read an analog value from a remote device.
+ */
+ 
 private PLabBridge pBridge;
 
 /**
@@ -27,8 +37,8 @@ void bindPLabBridge (PLabBridge bridge) {
   // We need something that listens to a change in the value
   // Vi bruker en anonym indre klasse for dette
   // We use an anonymous inner class for this
-  bridge.subscribeRead (new PLabRead() {
-    public void read (String string) {
+  bridge.subscribeMessages (new PLabRecv() {
+    public void receive (String string) {
       myVal = int (string);
     }
   });
