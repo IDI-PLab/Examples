@@ -1,15 +1,25 @@
-// Interfacene er beskrevet i Interfaces eksempelet
-// Interfaces described in the Interfaces example
-interface PLabBridge {
-  public int getWidth ();
-  public int getHeight ();
-  public void write (String string);
-  public void subscribeRead (PLabRead sub);
-  public void subscribeError (PLabRead sub);
-}
-interface PLabRead {
-  public void read(String string);
-}
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+/*
+ * This example shows how a button can be created and used to send messages to remote device
+ */
 private PLabBridge pBridge;
 
 /**
@@ -24,18 +34,6 @@ void bindPLabBridge (PLabBridge bridge) {
   // Sett stoerrelsen basert paa vindustoerrelsen 
   // Set the size based on window size
   size (bridge.getWidth (), bridge.getHeight ());
-  
-  // Registrer error output som en anonym indre klasse
-  // Register error output with anonymous inner class
-  /*
-  bridge.subscribeError (new PLabRead () {
-    public void read (String string) {
-      // Send videre til konsoll-ut
-      // Forward to console output
-      println (string);
-    }
-  });
-  */
   btnChanged ();
 }
 
@@ -156,7 +154,7 @@ void btnChanged () {
     } else {
       send = "OFF";
     }
-    pBridge.write (send);
+    pBridge.send (send);
   }
   
 }
