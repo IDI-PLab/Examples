@@ -52,6 +52,7 @@ void loop()
 // ------ The functions used for callback
 // Controlling the red light
 void redLightControl(char *arg) {
+  Serial.println(arg);
   if (strcmp ("ON", arg) == 0) {
     digitalWrite (RED_OUT, HIGH);
   } else if (strcmp("OFF", arg) == 0) {
@@ -65,6 +66,7 @@ void redLightControl(char *arg) {
 
 // Controlling the green light
 void greenLightControl(char *arg) {
+  Serial.println(arg);
   if (strcmp ("ON", arg) == 0) {
     digitalWrite (GREEN_OUT, HIGH);
   } else if (strcmp("OFF", arg) == 0) {

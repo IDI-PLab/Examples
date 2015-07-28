@@ -69,7 +69,7 @@ void loop() // run over and over
     
     if (num > 0) {
       char chars[20];
-      sprintf(chars, "AT+NAMEPLab-%02u", num+i);
+      sprintf(chars, "AT+NAMEPLabBLE%02u", num+i);
       units[i].print(chars);
     }
   }
