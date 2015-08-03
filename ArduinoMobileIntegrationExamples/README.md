@@ -67,6 +67,11 @@ To run in app, copy the following files to the Internet:
 An example that shows how a push button may be implemented in the app, and
 state reported to an Arduino through a Bluetooth device.
 
+Two versions of Arduino code:
+* One using `PLabBTSerial.h` located in our `PLabBT` library.
+* One using only `SoftwareSerial.h` and a simple state machine to parse
+incomming text
+
 To run in app, copy the following files to the Internet:
 * `SimpleButtonExample.pde`
 
