@@ -5,8 +5,8 @@
 
 // Definer inn/utgangspinnene som brukes for send (TX) og motta (RX) for bluetooth
 // Define I/O ports used for transmit (TX) and receive (RX)
-const int BT_RX = 10;
-const int BT_TX = 11;
+const int BT_RX = 11;  // Connect to RXD on Bluetooth unit
+const int BT_TX = 10;  // Connect to TXD on Bluetooth unit
 
 
 // Hvilken utgang vi har lysene paa
@@ -16,7 +16,7 @@ const int GREEN_OUT = 5;
 
 // Definer serieporten for kommunikasjon med bluetooth
 // Define the serial port for communication with bluetooth
-PLabBTSerial btSerial (BT_RX, BT_TX);
+PLabBTSerial btSerial (BT_TX, BT_RX);
 
 // Oppsett av enheten og gi den til kjenne med BLE
 // Set up the unit and start advertising with BLE

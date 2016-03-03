@@ -5,16 +5,16 @@
 // PLabBTSerial is used to simplify gathering of text to lines. It extends SoftwareSerial.
 #include <PLabBTSerial.h>
 
-// rx (receive from) bluetooth pin. Connected to tx on bt unit
-const int btRxPin = 2;
-// tx (transmit to) bluetooth pin. Connected to rx on bt unit
-const int btTxPin = 6;
+// Definer inn/utgangspinnene som brukes for send (TX) og motta (RX) for bluetooth
+// Define I/O ports used for transmit (TX) and receive (RX)
+const int BT_RX = 6;  // Connect to RXD on Bluetooth unit
+const int BT_TX = 2;  // Connect to TXD on Bluetooth unit
 
 // Creates a PLabBTSerial object. The rx (receive) and tx (transmit) pins MUST be defined.
 // rx refers to input to arduino, that is what is transmitted (tx) from the device. tx works the same way.
 // inverse_logic is inherited from SoftwareSerial. Set this to true if your device responds to active low. The argument is optional and defaults to false.
 // bufferSize is the size of the internal buffer of PLabBTSerial. Set this to be able to include the longest message you expect to receive. Defaults to 50
-PLabBTSerial btSerial(btRxPin, btTxPin /*, false optional, default: false, 100 optional, default: 50*/);
+PLabBTSerial btSerial(BT_TX, BT_RX /*, false optional, default: false, 100 optional, default: 50*/);
 
 void setup() {
   // Start debug output

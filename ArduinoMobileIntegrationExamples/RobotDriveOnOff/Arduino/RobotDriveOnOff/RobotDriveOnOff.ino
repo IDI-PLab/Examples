@@ -5,13 +5,13 @@
 // Motors of the robot
 ZumoMotors motors;
 
-// rx (receive from) bluetooth pin. Connected to tx on bt unit
-const int btRxPin = 2;
-// tx (transmit to) bluetooth pin. Connected to rx on bt unit
-const int btTxPin = 6;
+// Definer inn/utgangspinnene som brukes for send (TX) og motta (RX) for bluetooth
+// Define I/O ports used for transmit (TX) and receive (RX)
+const int BT_RX = 6;  // Connect to RXD on Bluetooth unit
+const int BT_TX = 2;  // Connect to TXD on Bluetooth unit
 
 // Define the serial port for communication with bluetooth
-PLabBTSerial btSerial (btRxPin, btTxPin);
+PLabBTSerial btSerial (BT_TX, BT_RX);
 
 // If we should enable the zumo robot
 boolean robotEnabled = false;

@@ -3,8 +3,8 @@
 #include <PLabBTCallback.h>
 
 // Define I/O ports used for transmit (TX) and receive (RX)
-const int BT_RX = 10;
-const int BT_TX = 11;
+const int BT_RX = 11;  // Connect to RXD on Bluetooth unit
+const int BT_TX = 10;  // Connect to TXD on Bluetooth unit
 
 // Which output we have the lights connected to
 const int RED_OUT = 4;
@@ -12,7 +12,7 @@ const int GREEN_OUT = 5;
 
 // Define the callback controller
 // Last is message divider. The sign that is between the command and argument. This is the same as the default value, ':'
-PLabBTCallback btCallback(BT_RX, BT_TX, ':');
+PLabBTCallback btCallback(BT_TX, BT_RX, ':');
 
 
 // Set up communication and functions that listen
